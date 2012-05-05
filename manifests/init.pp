@@ -21,7 +21,9 @@ class mongodb(
   $replSet = $mongodb::params::replSet,
   $ulimit_nofile = $mongodb::params::ulimit_nofile,
   $repository = $mongodb::params::repository,
-  $package = $mongodb::params::package
+  $package = $mongodb::params::package, 
+  $rest = $mongodb::params::rest,
+  $dbpath = $mongodb::params::dbpath
 ) inherits mongodb::params {
 
   if !defined(Package["python-software-properties"]) {
@@ -65,6 +67,20 @@ class mongodb(
   file { "/etc/init/mongodb.conf":
     content => template("mongodb/mongodb.conf.erb"),
     mode => "0644",
+    notify => Service["mongodb"],
+    require => Package[$package],
+  }
+
+  file { "/etc/mongodb.conf":
+    content => template("mongodb/etc_mongodb.conf.erb"),
+    mode => "0644",
+    notify => Service["mongodb"],
+    require => Package[$package],
+  }
+
+  file { "/etc/init.d/mongodb":
+    content => template("mongodb/initd_mongodb.erb"),
+    mode => "0755",
     notify => Service["mongodb"],
     require => Package[$package],
   }

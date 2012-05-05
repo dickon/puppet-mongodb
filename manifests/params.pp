@@ -23,4 +23,7 @@ class mongodb::params {
   # MongoDB has an upper hard limit of 20k.
   # http://www.mongodb.org/display/DOCS/Too+Many+Open+Files
   $ulimit_nofile = 1024
+
+  $rest = false
+  $dbpath = "/var/lib/mongodb"
 }
